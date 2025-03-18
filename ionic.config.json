@@ -1,0 +1,7 @@
+{
+  "name": "RecuperacionDIWFrontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
