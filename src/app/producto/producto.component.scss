@@ -1,0 +1,270 @@
+/* producto.component.scss */
+
+/* Header styles - reaprovechados de tu código original */
+.custom-header {
+  --background: white;
+  --color: #2c3e50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+
+  ion-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  ion-buttons {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  ion-title {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 1.5rem;
+    letter-spacing: 5px;
+    font-weight: bold;
+    font-family: "serif";
+  }
+
+  ion-buttons[slot="start"],
+  ion-buttons[slot="end"] {
+    min-width: auto;
+    padding: 0 5px;
+  }
+
+  ion-buttons[slot="start"]{
+    margin-left: 40px;
+  }
+
+  ion-buttons[slot="end"]{
+    margin-right: 40px;
+  }
+
+  ion-icon {
+    font-size: 1.4rem;
+    margin: 0 10px;
+  }
+}
+
+/* Content styles */
+ion-content {
+  --background: white !important;
+}
+
+/* Error container */
+.error-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.error-content {
+  text-align: center;
+  padding: 20px;
+}
+
+.error-title {
+  font-size: 1.5rem;
+  font-family: "serif";
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+/* Product container */
+.product-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+@media (min-width: 768px) {
+  .product-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Product image */
+.product-image-container {
+  background-color: #EBEFEF;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-image {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Product details */
+.product-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-info {
+  margin-bottom: 30px;
+}
+
+.product-name {
+  font-size: 1.8rem;
+  font-weight: bold;
+  font-family: "serif";
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.product-model {
+  font-size: 1.2rem;
+  color: #2c3e50;
+  margin-bottom: 16px;
+}
+
+.product-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.product-rent {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.product-description {
+  color: #2c3e50;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+/* Quantity selector */
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.quantity-label {
+  color: #2c3e50;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quantity-button {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --background: transparent;
+  --color: #2c3e50;
+  --background-hover: #f0f0f0;
+}
+
+.quantity-value {
+  font-size: 1.2rem;
+  font-weight: 500;
+  min-width: 32px;
+  text-align: center;
+  color: #2c4251;
+}
+
+/* Add to cart button */
+.add-to-cart-button {
+  --background: #2c3e50;
+  --background-hover: #1a2530;
+  --color: white;
+  width: 100%;
+  margin-bottom: 30px;
+  --border-radius: 4px;
+  font-weight: 500;
+}
+
+/* Specifications */
+.specifications {
+  border-top: 1px solid #eee;
+  padding-top: 24px;
+  margin-bottom: 30px;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-family: "serif";
+  color: #2c3e50;
+  margin-bottom: 16px;
+}
+
+.specifications-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.spec-item {
+  margin-bottom: 4px;
+  color: #2c3e50;
+}
+
+@media (max-width: 767px) {
+  .specifications-grid {
+    grid-template-columns: 1fr;
+
+  }
+}
+
+.spec-text {
+  font-size: 0.9rem;
+}
+
+.spec-name {
+  font-weight: 500;
+}
+
+/* Features */
+.features {
+  border-top: 1px solid #eee;
+  padding-top: 24px;
+}
+
+.features-list {
+  list-style-type: disc;
+  list-style-position: inside;
+  padding-left: 8px;
+}
+
+.feature-item {
+  font-size: 0.9rem;
+  color: #2c3e50;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+/* Footer */
+.product-footer {
+  text-align: center;
+  padding: 24px 0;
+  border-top: 1px solid #eee;
+  margin-top: 48px;
+  color: #777;
+  font-size: 0.9rem;
+}

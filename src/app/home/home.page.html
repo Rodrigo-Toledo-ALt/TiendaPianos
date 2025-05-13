@@ -1,20 +1,33 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
+<!-- home.page.html -->
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="carousel-container">
+    <div class="carousel-slide" *ngFor="let slide of slides; let i = index" [ngClass]="{ 'active': i === currentSlide }">
+      <img [src]="slide.image" class="carousel-image" alt="Imagen de carrusel">
+      <div class="slide-content">
+        <h2>{{ slide.title }}</h2>
+        <p>{{ slide.description }}</p>
+        <ion-button fill="outline" (click)="nextSlide()">MÁS INFO</ion-button>
+      </div>
+    </div>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <!-- Controles Manuales -->
+    <button class="prev" (click)="prevSlide()">&#10094;</button>
+    <button class="next" (click)="nextSlide()">&#10095;</button>
   </div>
+
+  <!-- Sección de productos en dos columnas -->
+  <ion-grid class="product-grid">
+    <ion-row>
+      <ion-col size="12" size-md="6" *ngFor="let piano of pianos">
+        <div class="product-card" (click)="navigateToProduct(piano.id)">
+          <img [src]="piano.image" class="product-image" alt="Piano">
+          <h3>{{ piano.name }}</h3>
+          <p>{{ piano.model }}</p>
+          <p class="price">{{ piano.price }} €</p>
+          <p *ngIf="piano.rentOption" class="rent-option">Opción a compra: {{ piano.rentOption }} €/mes</p>
+          <ion-button fill="outline" (click)="navigateToProduct(piano.id); $event.stopPropagation()">MÁS INFO</ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

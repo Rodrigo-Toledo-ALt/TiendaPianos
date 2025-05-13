@@ -1,0 +1,47 @@
+<!-- user-dashboard.component.html -->
+<div class="dashboard-container">
+  <ion-card class="dashboard-card">
+    <ion-card-header>
+      <ion-card-title class="empty-title">Mis Pedidos</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <!-- Si el usuario no tiene pedidos -->
+      <div *ngIf="!hasOrders" class="empty-state">
+        <ion-icon name="bag-outline" class="empty-icon"></ion-icon>
+        <h3 class="empty-title">No hay pedidos todavía</h3>
+        <p class="empty-message">Explore nuestra colección de pianos y realice su primera compra.</p>
+        <ion-button (click)="explorePianos()" color="dark">
+          <ion-icon name="musical-notes-outline" slot="start"></ion-icon>
+          Explorar Pianos
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="dashboard-card">
+    <ion-card-header>
+      <ion-card-title class="empty-title">Configuración de la Cuenta</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item lines="full" class="account-item">
+        <ion-label class="item-label">
+          <h3 class="item-title">Cambiar Contraseña</h3>
+          <p class="item-description">Actualice su contraseña regularmente para mayor seguridad</p>
+        </ion-label>
+        <ion-button slot="end" class="item-button" fill="outline">
+          Cambiar
+        </ion-button>
+      </ion-item>
+
+      <ion-item lines="none" class="account-item">
+        <ion-label class="item-label">
+          <h3 class="item-title">Actualizar Información Personal</h3>
+          <p class="item-description">Mantenga actualizada su información de contacto</p>
+        </ion-label>
+        <ion-button slot="end" class="item-button" fill="outline">
+          Editar
+        </ion-button>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</div>

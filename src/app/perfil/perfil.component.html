@@ -1,0 +1,24 @@
+<!-- perfil.component.html -->
+<ion-content [fullscreen]="true">
+
+  <main class="ion-padding">
+    <div class="profile-header">
+      <h1 class="profile-title">Perfil de {{currentUser?.name}}</h1>
+    </div>
+
+    <ion-card class="info-card">
+      <ion-card-header>
+        <ion-card-title>Información Personal</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Nombre:</strong> {{currentUser?.name}}</p>
+        <p><strong>Email:</strong> {{currentUser?.email}}</p>
+        <p><strong>Rol:</strong> {{isAdmin ? 'Administrador' : 'Usuario'}}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Dashboard condicional basado en el rol -->
+    <app-admin-dashboard *ngIf="isAdmin"></app-admin-dashboard>
+    <app-user-dashboard *ngIf="!isAdmin"></app-user-dashboard>
+  </main>
+</ion-content>

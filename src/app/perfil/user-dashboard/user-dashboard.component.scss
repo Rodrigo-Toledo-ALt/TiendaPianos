@@ -1,0 +1,96 @@
+// user-dashboard.component.scss
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dashboard-card {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  font-family: serif;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 48px;
+  color: #bdc3c7;
+  margin-bottom: 16px;
+}
+
+.empty-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+  font-family: serif;
+}
+
+.empty-message {
+  color: #7f8c8d;
+  margin-bottom: 24px;
+}
+
+.account-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 8px;
+  --background: transparent;
+}
+
+.item-label {
+  margin: 8px 0;
+}
+
+.item-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 4px;
+}
+
+.item-description {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+.adaggio-button {
+  --background: #2c3e50;
+  --background-hover: #1a2530;
+  --color: white;
+  font-weight: 500;
+  --border-radius: 4px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+}
+
+.item-button {
+  --border-color: #2c3e50;
+  --color: #2c3e50;
+  --border-width: 1px;
+  --border-style: solid;
+  --background-hover: rgba(44, 62, 80, 0.1);
+  --border-radius: 4px;
+  font-weight: 500;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  height: 36px;
+  margin: 0;
+}
+
+

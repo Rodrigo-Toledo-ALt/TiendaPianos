@@ -1,0 +1,41 @@
+<!-- admin-dashboard.component.html -->
+<div class="admin-container">
+  <div class="header-actions">
+    <h2 class="section-title">Administración de Pianos</h2>
+    <ion-button (click)="openAddPianoModal()" color="dark">
+      <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+      Añadir Piano
+    </ion-button>
+  </div>
+
+  <ion-card class="piano-table-card">
+    <ion-card-content>
+      <ion-grid class="piano-table">
+        <ion-row class="table-header">
+          <ion-col size="2">Imagen</ion-col>
+          <ion-col size="3">Nombre</ion-col>
+          <ion-col size="3">Modelo</ion-col>
+          <ion-col size="2">Precio</ion-col>
+          <ion-col size="2">Acciones</ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let piano of pianos" class="table-row">
+          <ion-col size="2">
+            <img [src]="piano.image" [alt]="piano.name" class="piano-image">
+          </ion-col>
+          <ion-col size="3" class="piano-name">{{piano.name}}</ion-col>
+          <ion-col size="3">{{piano.model}}</ion-col>
+          <ion-col size="2">{{piano.price}} €</ion-col>
+          <ion-col size="2" class="actions-col">
+            <ion-button fill="clear" (click)="openEditPianoModal(piano)">
+              <ion-icon name="create-outline" color="dark"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" (click)="deletePiano(piano)">
+              <ion-icon name="trash-outline" color="danger"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</div>

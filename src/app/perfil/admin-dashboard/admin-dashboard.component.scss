@@ -1,0 +1,57 @@
+// admin-dashboard.component.scss
+.admin-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.piano-table-card {
+  background-color: #f8f9fa;
+}
+
+.piano-table {
+  width: 100%;
+}
+
+.table-header {
+  font-weight: bold;
+  background-color: #e9ecef;
+  padding: 10px 0;
+}
+
+.table-row {
+  border-bottom: 1px solid #e9ecef;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.piano-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.piano-name {
+  font-weight: 600;
+}
+
+.actions-col {
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+}

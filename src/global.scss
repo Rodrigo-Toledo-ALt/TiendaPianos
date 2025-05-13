@@ -35,3 +35,91 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+
+:root {
+  --ion-color-primary: white;
+  --ion-color-secondary: white;
+  --ion-color-tertiary: white;
+
+
+  --color1: white;
+  --color2: #5D1D38;
+  --color3: #f1ead0;
+  --color4: #e5dab5;
+  --color5: #2d3e50;
+  --color6: #2c4251; // no se que ha pasado.
+  --color7: #96305A; // alguien no esta pillando bien los colores.
+  --color8: #5E2142; // antiguamente el color fondo de las publiciones/comentarios.
+
+}
+
+/*
+Css del modal
+ */
+ion-modal {
+  --height: 50%;
+  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --max-width: 90%;
+  --max-height: 90%;
+  --background: white;
+  align-items: center;
+  justify-content: center;
+}
+
+ion-modal::part(backdrop) {
+  background: rgba(209, 213, 219);
+  opacity: 1;
+}
+
+.item-modal{
+  max-width: 400px;
+  display: inline-block;
+  --background: white;
+  opacity: 1;
+}
+
+.button-modal{
+
+  max-width: 400px;
+  display: inline-block;
+  color: white;
+  --background: #2c3e50;
+
+}
+
+
+ion-modal.compact-modal {
+  --width: auto;
+  --height: auto;
+  --max-width: 90%;
+  --max-height: 90%;
+  --background: white;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-modal{
+  background-color: white;
+  opacity: 1;
+  color: #2c3e50;
+}
+
+
+ion-content {
+  --background: white !important;
+}
+
+ion-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  ion-router-outlet {
+    flex: 1;
+    margin-top: 56px; /* Altura del header */
+  }
+}
+
+
+

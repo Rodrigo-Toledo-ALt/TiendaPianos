@@ -1,0 +1,84 @@
+
+
+<ion-content [fullscreen]="true">
+  <div *ngIf="!piano" class="error-container">
+    <div class="error-content">
+      <h1 class="error-title">Producto no encontrado</h1>
+      <ion-button (click)="navigateToHome()">
+        Volver a la tienda
+      </ion-button>
+    </div>
+  </div>
+
+  <main *ngIf="piano" class="product-container">
+    <div class="product-grid">
+      <!-- Product Image -->
+      <div class="product-image-container">
+        <img
+          [src]="piano.image"
+          [alt]="piano.name + ' ' + piano.model"
+          class="product-image"
+        />
+      </div>
+
+      <!-- Product Details -->
+      <div class="product-details">
+        <div class="product-info">
+          <h1 class="product-name">{{piano.name}}</h1>
+          <h2 class="product-model">{{piano.model}}</h2>
+          <p class="product-price">{{piano.price}} €</p>
+          <p *ngIf="piano.rentOption" class="product-rent">
+            Opción a compra: {{piano.rentOption}} €/mes
+          </p>
+          <p class="product-description">{{piano.description}}</p>
+
+          <!-- Quantity Selector -->
+          <div class="quantity-selector">
+            <span class="quantity-label">Cantidad:</span>
+            <div class="quantity-controls">
+              <ion-button class="quantity-button" (click)="decreaseQuantity()">
+                <ion-icon name="remove-circle-outline"></ion-icon>
+              </ion-button>
+              <span class="quantity-value">{{quantity}}</span>
+              <ion-button class="quantity-button" (click)="increaseQuantity()">
+                <ion-icon name="add-circle-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+
+          <!-- Add to Cart Button -->
+          <ion-button
+            class="add-to-cart-button"
+            (click)="handleAddToCart()"
+          >
+            AÑADIR AL CARRITO
+          </ion-button>
+        </div>
+
+        <!-- Specifications -->
+        <div class="specifications">
+          <h3 class="section-title">Especificaciones</h3>
+          <div class="specifications-grid">
+            <div *ngFor="let spec of piano?.specifications; let i = index" [ngClass]="{'spec-item': true, 'spec-odd': i % 2 === 0, 'spec-even': i % 2 !== 0}">
+              <p class="spec-text">
+                <span class="spec-name">{{spec.name}}:</span> {{spec.value}}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Features -->
+        <div class="features">
+          <h3 class="section-title">Características</h3>
+          <ul class="features-list">
+            <li *ngFor="let feature of piano?.features" class="feature-item">{{feature}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="product-footer">
+    <p>© {{currentYear}} ADAGGIO - Piano Store. All rights reserved.</p>
+  </footer>
+</ion-content>

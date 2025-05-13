@@ -1,0 +1,120 @@
+<!-- piano-form.component.html -->
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{ isEdit ? 'Editar Piano' : 'Añadir Nuevo Piano' }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="onSubmit()">
+    <!-- Información básica -->
+    <div class="form-section">
+      <h2 class="section-title">Información Básica</h2>
+
+      <ion-item>
+        <ion-label position="stacked">Nombre</ion-label>
+        <ion-input [(ngModel)]="piano.name" name="name" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Modelo</ion-label>
+        <ion-input [(ngModel)]="piano.model" name="model" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Precio (€)</ion-label>
+        <ion-input [(ngModel)]="piano.price" name="price" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Opción de alquiler (€/mes)</ion-label>
+        <ion-input [(ngModel)]="piano.rentOption" name="rentOption"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">URL de imagen</ion-label>
+        <ion-input [(ngModel)]="piano.image" name="image" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Descripción</ion-label>
+        <ion-textarea [(ngModel)]="piano.description" name="description" rows="4"></ion-textarea>
+      </ion-item>
+    </div>
+
+    <!-- Especificaciones -->
+    <div class="form-section">
+      <h2 class="empty-title">Especificaciones</h2>
+
+      <div class="spec-list">
+        <div *ngFor="let spec of specificationsList; let i = index" class="spec-item">
+          <ion-row>
+            <ion-col size="5">
+              <ion-item>
+                <ion-label position="stacked">Característica</ion-label>
+                <ion-input [(ngModel)]="specificationsList[i].name" [name]="'specName' + i"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="5">
+              <ion-item>
+                <ion-label position="stacked">Valor</ion-label>
+                <ion-input [(ngModel)]="specificationsList[i].value" [name]="'specValue' + i"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="2" class="ion-align-self-end">
+              <ion-button fill="clear" color="danger" (click)="removeSpecification(i)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+
+      <ion-button expand="block" fill="outline" (click)="addSpecification()" class="add-button">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Añadir Especificación
+      </ion-button>
+    </div>
+
+    <!-- Características -->
+    <div class="form-section">
+      <h2 class="empty-title">Características</h2>
+
+      <div class="feature-list">
+        <div *ngFor="let feature of featuresList; let i = index" class="feature-item">
+          <ion-row>
+            <ion-col size="10">
+              <ion-item>
+                <ion-label position="stacked">Característica</ion-label>
+                <ion-input [(ngModel)]="featuresList[i]" [name]="'feature' + i"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="2" class="ion-align-self-end">
+              <ion-button fill="clear" color="danger" (click)="removeFeature(i)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+
+      <ion-button expand="block" fill="outline" (click)="addFeature()" class="add-button">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Añadir Característica
+      </ion-button>
+    </div>
+
+    <div class="form-actions">
+      <ion-button type="submit" expand="block">
+        {{ isEdit ? 'Actualizar' : 'Guardar' }}
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

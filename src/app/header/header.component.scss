@@ -1,0 +1,72 @@
+.custom-header {
+  --background: white;
+  --color: #2c3e50;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra el contenido del toolbar */
+  padding: 0 10px; /* Reduce el padding lateral */
+
+  ion-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  ion-buttons {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Espaciado menor entre los botones */
+  }
+
+  ion-title {
+    flex-grow: 1; /* Ocupa el espacio restante */
+    text-align: center;
+    font-size: 1.5rem;
+    letter-spacing: 5px;
+    font-weight: bold;
+    font-family: "serif";
+  }
+
+  ion-buttons[slot="start"],
+  ion-buttons[slot="end"] {
+    min-width: auto; /* Permite que los botones no ocupen más de lo necesario */
+    padding: 0 5px; /* Reduce el espacio lateral de los botones */
+  }
+
+  ion-buttons[slot="start"]{
+    margin-left: 40px;
+  }
+
+  ion-buttons[slot="end"]{
+    margin-right: 40px;
+  }
+
+  ion-icon {
+    font-size: 1.4rem;
+    margin: 0 10px; /* Reduce la separación de los íconos */
+  }
+}
+
+// Estilos para el modal
+.col-modal {
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.item-modal {
+  --background: #f5f5f5;
+  --border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.input-modal {
+  --padding-start: 10px;
+}
+
+.button-modal {
+  --background: #2c3e50;
+  --color: white;
+  --border-radius: 8px;
+  font-weight: bold;
+}

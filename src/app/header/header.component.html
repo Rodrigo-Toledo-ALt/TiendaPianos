@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar class="custom-header">
+    <!-- Menú a la izquierda -->
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-icon name="musical-notes-outline"></ion-icon>
+      <!-- Botón de búsqueda -->
+      <ion-icon name="search-outline" (click)="openSearchModal()"></ion-icon>
+    </ion-buttons>
+
+    <!-- Logo en el centro -->
+    <ion-title class="logo-text" [routerLink]="['/home']">A D A G G I O</ion-title>
+
+    <!-- Íconos a la derecha -->
+    <ion-buttons slot="end">
+      <ion-icon name="bag-outline" [routerLink]="['/carrito']"></ion-icon>
+
+
+
+      <!-- Botón de perfil (solo visible si el usuario está autenticado) -->
+      <ion-icon *ngIf="isAuthenticated()" name="person-outline" [routerLink]="['/perfil']"></ion-icon>
+
+      <!-- Botón de logout (solo visible si el usuario está autenticado) -->
+      <ion-icon *ngIf="isAuthenticated()" name="log-out-outline" (click)="handleLogout()"></ion-icon>
+
+      <!-- Botón de login (solo visible si NO está autenticado) -->
+      <ion-icon *ngIf="!isAuthenticated()" name="person-outline" [routerLink]="['/login']"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Modal de Búsqueda -->
+<ion-modal #searchModal cssClass="compact-modal">
+  <ng-template>
+    <div>
+      <ion-col class="col-modal" size="12" size-md="6">
+        <ion-item class="item-modal">
+          <ion-input class="input-modal" [(ngModel)]="searchQuery" placeholder="Búsqueda"></ion-input>
+        </ion-item>
+
+        <ion-button class="button-modal" expand="full" (click)="performSearch()">BUSCAR</ion-button>
+      </ion-col>
+    </div>
+  </ng-template>
+</ion-modal>
