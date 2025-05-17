@@ -1,0 +1,107 @@
+<div class="registro-container">
+  <div class="registro-content">
+    <div class="registro-form-container">
+      <div class="registro-header">
+        <!-- Music icon usando SVG en lugar del componente Lucide -->
+        <svg class="registro-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18V5l12-2v13"></path>
+          <circle cx="6" cy="18" r="3"></circle>
+          <circle cx="18" cy="16" r="3"></circle>
+        </svg>
+        <h2 class="registro-title">CREAR CUENTA</h2>
+        <p class="registro-subtitle">
+          Regístrate para disfrutar de nuestros servicios
+        </p>
+      </div>
+
+      <form class="registro-form" [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <div class="input-group">
+            <label for="nombre" class="form-label">Nombre completo</label>
+            <input
+              id="nombre"
+              type="text"
+              formControlName="nombre"
+              class="form-input"
+              required
+            />
+            <div *ngIf="f['nombre'].touched && f['nombre'].invalid" class="error-message">
+              <div *ngIf="f['nombre'].errors?.['required']">El nombre es obligatorio.</div>
+              <div *ngIf="f['nombre'].errors?.['minlength']">El nombre debe tener al menos 2 caracteres.</div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              class="form-input"
+              required
+            />
+            <div *ngIf="f['email'].touched && f['email'].invalid" class="error-message">
+              <div *ngIf="f['email'].errors?.['required']">El correo electrónico es obligatorio.</div>
+              <div *ngIf="f['email'].errors?.['email']">El formato del correo no es válido.</div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="password" class="form-label">Contraseña</label>
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              class="form-input"
+              required
+            />
+            <div *ngIf="f['password'].touched && f['password'].invalid" class="error-message">
+              <div *ngIf="f['password'].errors?.['required']">La contraseña es obligatoria.</div>
+              <div *ngIf="f['password'].errors?.['minlength']">La contraseña debe tener al menos 6 caracteres.</div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
+            <input
+              id="confirmPassword"
+              type="password"
+              formControlName="confirmPassword"
+              class="form-input"
+              required
+            />
+            <div *ngIf="f['confirmPassword'].touched && f['confirmPassword'].invalid" class="error-message">
+              <div *ngIf="f['confirmPassword'].errors?.['required']">Confirmar la contraseña es obligatorio.</div>
+              <div *ngIf="f['confirmPassword'].errors?.['passwordMismatch']">Las contraseñas no coinciden.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mensajes de error o éxito -->
+        <div *ngIf="errorMessage" class="form-message error-alert">
+          {{ errorMessage }}
+        </div>
+        <div *ngIf="successMessage" class="form-message success-alert">
+          {{ successMessage }}
+        </div>
+
+        <div class="button-container">
+          <button
+            type="submit"
+            [disabled]="registroForm.invalid"
+            class="registro-button"
+          >
+            CREAR CUENTA
+          </button>
+        </div>
+      </form>
+
+      <div class="login-link">
+        <p>¿Ya tienes una cuenta?</p>
+        <a routerLink="/login" class="link">
+          Iniciar sesión
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

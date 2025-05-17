@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, UrlTree } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -15,16 +15,22 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    // Verificamos si el usuario está autenticado usando el método isAuthenticated()
-    // que hemos definido en nuestro AuthService
-    if (this.authService.isAuthenticated()) {
-      return true;
+    // Check if the user is authenticated
+    if (!this.authService.isAuthenticated()) {
+      // If not authenticated, redirect to login with return URL
+      return this.router.createUrlTree(['/login'], {
+        queryParams: { returnUrl: state.url }
+      });
     }
 
-    // Si no está autenticado, guardamos la URL que intentaba acceder
-    // para redirigirle después del login
-    return this.router.createUrlTree(['/login'], {
-      queryParams: { returnUrl: state.url }
-    });
+    // Check if a specific role is required for this route
+    const requiredRole = route.data['requiredRole'] as string;
+    if (requiredRole && !this.authService.hasRole(requiredRole)) {
+      // User doesn't have the required role, redirect to home
+      return this.router.createUrlTree(['/home']);
+    }
+
+    // User is authenticated and has the required role (if any)
+    return true;
   }
 }

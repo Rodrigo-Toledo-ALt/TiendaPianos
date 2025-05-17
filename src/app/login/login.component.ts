@@ -68,28 +68,26 @@ export class LoginComponent implements OnInit {
       password: this.f['password'].value
     };
 
-    this.sesionService.PostLogin(credentials).subscribe({
-      next: (data) => {
+    this.sesionService.login({email: credentials.username, contrasena: credentials.password}).subscribe({
+      next: (data: any) => {
         console.log('Login exitoso', data);
 
-        // Save token in auth service
-        this.authService.setToken(data.token, data.expiration);
+        // Guardar datos de autenticación
+        this.authService.setAuthData(data);
 
-        // Guardar datos del usuario basados en el email
-        const isAdmin = credentials.username === this.testCredentials.admin.email;
-
-        // Navigate to return url
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/perfil'
-        this.router.navigate([this.returnUrl]);
-
-        // Guardar información del usuario
+        // Store user data from response
         this.authService.setUserData({
-          name: isAdmin ? 'Administrador' : 'Usuario',
+          name: data.username,
           email: credentials.username,
-          role: isAdmin ? 'admin' : 'user'
+          userId: data.userId,
+          role: data.role || 'user'
         });
+
+        // Navigate to return url or profile
+        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/perfil';
+        this.router.navigate([this.returnUrl]);
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error en el login', error);
         alert('Error al iniciar sesión. Verifique sus credenciales.');
       },

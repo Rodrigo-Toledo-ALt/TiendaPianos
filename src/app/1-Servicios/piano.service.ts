@@ -1,9 +1,13 @@
 // piano.service.ts
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+import { PianoDTO, CaracteristicaDTO, ValorEspecificacionDTO } from './models';
 
+// Interfaz temporal para mantener la compatibilidad con el código existente
 export interface Piano {
-  id: number;
+  id?: number;
   image: string;
   name: string;
   model: string;
@@ -18,7 +22,11 @@ export interface Piano {
   providedIn: 'root'
 })
 export class PianoService {
-  // Datos de pianos con información completa
+  private apiUrl = 'http://localhost:8080/api';
+  private pianos: PianoDTO[] = [];
+  private pianosCargados = false;
+
+  // Mantener temporalmente los datos de muestra para compatibilidad
   private pianosData: Piano[] = [
     {
       id: 1,
@@ -121,22 +129,96 @@ export class PianoService {
     }
   ];
 
-  // BehaviorSubject para compartir datos entre componentes
+  // BehaviorSubjects para compartir datos entre componentes
   private selectedPianoSource = new BehaviorSubject<Piano | null>(null);
   selectedPiano$ = this.selectedPianoSource.asObservable();
 
-  constructor() {}
+  private pianosSource = new BehaviorSubject<PianoDTO[]>([]);
+  pianos$ = this.pianosSource.asObservable();
 
-  // Métodos para acceder a los datos
+  constructor(private http: HttpClient) {}
+
+  // Métodos para acceder a los datos del backend
+  obtenerPianos(): Observable<PianoDTO[]> {
+    return this.http.get<PianoDTO[]>(`${this.apiUrl}/pianos`).pipe(
+      tap(pianos => {
+        this.pianos = pianos;
+        this.pianosCargados = true;
+        this.pianosSource.next(pianos);
+      }),
+      catchError(error => {
+        console.error('Error al obtener pianos', error);
+        return of([]);
+      })
+    );
+  }
+
+  obtenerPianoPorId(id: number): Observable<PianoDTO> {
+    return this.http.get<PianoDTO>(`${this.apiUrl}/pianos/${id}`);
+  }
+
+  // ADMIN ENDPOINTS
+  obtenerTodosLosPianos(): Observable<PianoDTO[]> {
+    return this.http.get<PianoDTO[]>(`${this.apiUrl}/admin/pianos`);
+  }
+
+  crearPiano(piano: PianoDTO): Observable<PianoDTO> {
+    return this.http.post<PianoDTO>(`${this.apiUrl}/admin/pianos`, piano);
+  }
+
+  actualizarPiano(id: number, piano: PianoDTO): Observable<PianoDTO> {
+    return this.http.put<PianoDTO>(`${this.apiUrl}/admin/pianos/${id}`, piano);
+  }
+
+  eliminarPiano(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/admin/pianos/${id}`);
+  }
+
+  // Métodos de compatibilidad con el código existente
   getAllPianos(): Piano[] {
+    // Si ya tenemos pianos del backend, convertirlos al formato antiguo
+    if (this.pianosCargados) {
+      return this.convertirPianosAFormatoAntiguo(this.pianos);
+    }
+    // Si no, devolver los datos de muestra
     return this.pianosData;
   }
 
   getPianoById(id: number): Piano | undefined {
+    // Primero buscar en los pianos del backend
+    if (this.pianosCargados) {
+      const piano = this.pianos.find(p => p.id === id);
+      if (piano) {
+        return this.convertirPianoAFormatoAntiguo(piano);
+      }
+    }
+    // Si no se encuentra, buscar en los datos de muestra
     return this.pianosData.find(piano => piano.id === id);
   }
 
   setSelectedPiano(piano: Piano): void {
     this.selectedPianoSource.next(piano);
+  }
+
+  // Métodos helpers para convertir formatos
+  private convertirPianosAFormatoAntiguo(pianos: PianoDTO[]): Piano[] {
+    return pianos.map(piano => this.convertirPianoAFormatoAntiguo(piano));
+  }
+
+  private convertirPianoAFormatoAntiguo(piano: PianoDTO): Piano {
+    return {
+      id: piano.id,
+      image: piano.imagen,
+      name: piano.nombre,
+      model: piano.modelo,
+      price: piano.precio.toString(),
+      rentOption: piano.opcionAlquiler?.toString(),
+      description: piano.descripcion,
+      specifications: piano.especificaciones?.map(spec => ({
+        name: spec.tipo.nombre,
+        value: spec.valor
+      })),
+      features: piano.caracteristicas?.map(car => car.descripcion)
+    };
   }
 }

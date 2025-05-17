@@ -42,6 +42,8 @@ export class HomePage {
 
     // Iniciar autoplay
     this.startAutoplay();
+
+
   }
 
   startAutoplay() {

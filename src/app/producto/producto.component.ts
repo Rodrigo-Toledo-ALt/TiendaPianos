@@ -84,7 +84,7 @@ export class ProductoComponent implements OnInit {
 
     // User is authenticated, proceed with adding to cart
     if (this.piano) {
-      this.cartService.addToCart(this.piano.id, this.quantity);
+      this.cartService.addToCart(this.piano.id!, this.quantity);
 
       // Show confirmation message (you could replace with a Toast)
       alert(`Se ha añadido ${this.quantity} ${this.piano.model} al carrito`);

@@ -13,7 +13,7 @@ import {
   IonInput
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { bagOutline, musicalNotesOutline, searchOutline, personOutline } from 'ionicons/icons';
+import {bagOutline, musicalNotesOutline, searchOutline, personOutline, logOutOutline} from 'ionicons/icons';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -37,6 +37,7 @@ export class HeaderComponent {
 
   constructor(private authService: AuthService) {
     addIcons({
+      'log-out-outline': logOutOutline,
       'musical-notes-outline': musicalNotesOutline,
       'bag-outline': bagOutline,
       'search-outline': searchOutline,
