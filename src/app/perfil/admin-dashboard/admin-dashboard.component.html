@@ -8,14 +8,37 @@
     </ion-button>
   </div>
 
-  <ion-card class="piano-table-card">
+  <!-- Mensaje de error -->
+  <ion-card *ngIf="error" color="danger">
+    <ion-card-content>
+      <ion-text>{{ error }}</ion-text>
+      <ion-button slot="end" fill="clear" (click)="loadPianos()">
+        <ion-icon name="refresh-outline"></ion-icon>
+        Reintentar
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Loading skeleton -->
+  <ion-card *ngIf="isLoading" class="piano-table-card">
+    <ion-card-content>
+      <ion-skeleton-text animated style="width: 100%; height: 40px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%; height: 80px; margin-top: 10px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%; height: 80px; margin-top: 10px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%; height: 80px; margin-top: 10px;"></ion-skeleton-text>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Piano table -->
+  <ion-card *ngIf="!isLoading" class="piano-table-card">
     <ion-card-content>
       <ion-grid class="piano-table">
         <ion-row class="table-header">
           <ion-col size="2">Imagen</ion-col>
-          <ion-col size="3">Nombre</ion-col>
-          <ion-col size="3">Modelo</ion-col>
+          <ion-col size="2">Nombre</ion-col>
+          <ion-col size="2">Modelo</ion-col>
           <ion-col size="2">Precio</ion-col>
+          <ion-col size="2">Estado</ion-col>
           <ion-col size="2">Acciones</ion-col>
         </ion-row>
 
@@ -23,16 +46,30 @@
           <ion-col size="2">
             <img [src]="piano.image" [alt]="piano.name" class="piano-image">
           </ion-col>
-          <ion-col size="3" class="piano-name">{{piano.name}}</ion-col>
-          <ion-col size="3">{{piano.model}}</ion-col>
+          <ion-col size="2" class="piano-name">{{piano.name}}</ion-col>
+          <ion-col size="2">{{piano.model}}</ion-col>
           <ion-col size="2">{{piano.price}} €</ion-col>
+          <ion-col size="2">
+            <ion-badge [color]="piano.estado === 'activo' ? 'success' : 'medium'">
+              {{piano.estado === 'activo' ? 'Activo' : 'Inactivo'}}
+            </ion-badge>
+          </ion-col>
           <ion-col size="2" class="actions-col">
             <ion-button fill="clear" (click)="openEditPianoModal(piano)">
-              <ion-icon name="create-outline" color="dark"></ion-icon>
+              <ion-icon name="create-outline"></ion-icon>
             </ion-button>
-            <ion-button fill="clear" (click)="deletePiano(piano)">
-              <ion-icon name="trash-outline" color="danger"></ion-icon>
+            <ion-button fill="clear" (click)="togglePianoStatus(piano)">
+              <ion-icon name="power-outline"
+                        [color]="piano.estado === 'activo' ? 'danger' : 'success'">
+              </ion-icon>
             </ion-button>
+          </ion-col>
+        </ion-row>
+
+        <!-- Mensaje para cuando no hay pianos -->
+        <ion-row *ngIf="pianos.length === 0">
+          <ion-col size="12" class="ion-text-center">
+            <p>No hay pianos disponibles.</p>
           </ion-col>
         </ion-row>
       </ion-grid>

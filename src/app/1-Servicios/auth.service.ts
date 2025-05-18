@@ -26,7 +26,7 @@ export class AuthService {
     if (this.isTokenExpired()) {
       this.logout();
     }
-    
+
     // Configurar verificador periódico de token
     this.startTokenExpirationCheck();
   }
@@ -36,7 +36,7 @@ export class AuthService {
     if (response && response.token) {
       sessionStorage.setItem(this.TOKEN_KEY, response.token);
       sessionStorage.setItem(this.REFRESH_TOKEN_KEY, response.refreshToken);
-      
+
       // Guardar los datos del usuario
       const userData = {
         id: response.id,
@@ -44,7 +44,7 @@ export class AuthService {
         email: response.email,
         rol: response.rol
       };
-      
+
       this.setUserData(userData);
 
       // Notificar cambio de estado de autenticación
@@ -56,7 +56,7 @@ export class AuthService {
   getToken(): string | null {
     return sessionStorage.getItem(this.TOKEN_KEY);
   }
-  
+
   // Obtener el refresh token
   getRefreshToken(): string | null {
     return sessionStorage.getItem(this.REFRESH_TOKEN_KEY);
@@ -121,7 +121,7 @@ export class AuthService {
   private isTokenExpired(): boolean {
     const token = this.getToken();
     if (!token) return true;
-    
+
     // JWT típicamente está en formato: header.payload.signature
     // Intentamos decodificar el payload
     try {
@@ -190,7 +190,7 @@ export class AuthService {
       })
     );
   }
-  
+
   // Login con credenciales
   login(email: string, contrasena: string): Observable<JwtResponseDTO> {
     return this.sesionService.login({ email, contrasena }).pipe(
@@ -199,7 +199,7 @@ export class AuthService {
       })
     );
   }
-  
+
   // Registro de nuevo usuario
   registro(nombre: string, email: string, contrasena: string): Observable<JwtResponseDTO> {
     return this.sesionService.registro({ nombre, email, contrasena }).pipe(
@@ -208,7 +208,7 @@ export class AuthService {
       })
     );
   }
-  
+
   // Verificar si usuario tiene rol de administrador
   isAdmin(): boolean {
     return this.getUserRole() === 'ADMIN';

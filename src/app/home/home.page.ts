@@ -1,5 +1,5 @@
 // home.page.ts
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   IonContent,
   IonButton,
@@ -7,9 +7,11 @@ import {
   IonRow,
   IonCol
 } from '@ionic/angular/standalone';
-import { NgClass, NgForOf, NgIf, NgOptimizedImage } from "@angular/common";
+import { NgClass, NgForOf, NgIf, NgOptimizedImage, AsyncPipe } from "@angular/common";
 import { Router } from '@angular/router';
 import { PianoService, Piano } from '../1-Servicios/piano.service';
+import { PianoDTO } from '../1-Servicios/models';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -17,10 +19,10 @@ import { PianoService, Piano } from '../1-Servicios/piano.service';
   styleUrls: ['home.page.scss'],
   imports: [
     IonContent,
-    NgClass, NgOptimizedImage, NgForOf, IonButton, IonGrid, IonRow, IonCol, NgIf
+    NgClass, NgOptimizedImage, NgForOf, IonButton, IonGrid, IonRow, IonCol, NgIf, AsyncPipe
   ],
 })
-export class HomePage {
+export class HomePage implements OnInit, OnDestroy {
   slides = [
     { image: 'assets/piano1.jpeg', title: 'Steinway Limited Edition', description: 'Nuevo Steinway & Sons Noé' },
     { image: 'assets/piano2.jpg', title: 'Exclusivo Modelo', description: 'El Arte del Sonido' },
@@ -28,6 +30,9 @@ export class HomePage {
   ];
 
   pianos: Piano[] = [];
+  pianosSubscription: Subscription | null = null;
+  cargando = true;
+  error = '';
   currentSlide = 0;
   interval: any;
 
@@ -37,13 +42,31 @@ export class HomePage {
   ) {}
 
   ngOnInit() {
-    // Cargar los pianos desde el servicio
-    this.pianos = this.pianoService.getAllPianos();
+    // Cargar los pianos desde el backend
+    this.cargando = true;
+    this.pianosSubscription = this.pianoService.obtenerPianos().subscribe({
+      next: (pianos: PianoDTO[]) => {
+        // Convertir PianoDTO[] a Piano[] (formato antiguo)
+        this.pianos = pianos.map(piano => ({
+          id: piano.id,
+          image: piano.imagen,
+          name: piano.nombre,
+          model: piano.modelo,
+          price: piano.precio.toString(),
+          rentOption: piano.opcionAlquiler?.toString(),
+          description: piano.descripcion
+        }));
+        this.cargando = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar pianos', err);
+        this.error = 'Error al cargar pianos. Por favor, intente nuevamente.';
+        this.cargando = false;
+      }
+    });
 
     // Iniciar autoplay
     this.startAutoplay();
-
-
   }
 
   startAutoplay() {
@@ -67,5 +90,10 @@ export class HomePage {
 
   ngOnDestroy() {
     clearInterval(this.interval); // Limpiar el intervalo cuando el componente se destruya
+    
+    // Desuscribirse para prevenir memory leaks
+    if (this.pianosSubscription) {
+      this.pianosSubscription.unsubscribe();
+    }
   }
 }

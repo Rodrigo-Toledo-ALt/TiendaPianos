@@ -75,13 +75,6 @@ export class LoginComponent implements OnInit {
         // Guardar datos de autenticación
         this.authService.setAuthData(data);
 
-        // Store user data from response
-        this.authService.setUserData({
-          name: data.username,
-          email: credentials.username,
-          userId: data.userId,
-          role: data.role || 'user'
-        });
 
         // Navigate to return url or profile
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/perfil';

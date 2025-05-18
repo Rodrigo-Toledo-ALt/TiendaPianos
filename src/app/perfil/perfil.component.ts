@@ -58,13 +58,13 @@ export class PerfilComponent implements OnInit {
       // Este caso no debería ocurrir si el login guarda los datos correctamente
       // Pero es una buena práctica tener una solución de respaldo
       this.currentUser = {
-        name: 'Usuario',
+        nombre: 'Usuario',
         email: 'usuario@adaggio.com',
-        role: 'user'
+        rol: 'user'
       };
     }
     // Determinar si el usuario es administrador
-    this.isAdmin = this.currentUser && this.currentUser.role === 'admin';
+    this.isAdmin = this.currentUser && this.currentUser.rol === 'admin';
 
 
 
@@ -76,12 +76,7 @@ export class PerfilComponent implements OnInit {
       return;
     }
 
-    // Obtener los datos del usuario de sessionStorage
-    this.currentUser = this.authService.getUserData();
 
-    // Determinar si el usuario es administrador
-    // (asumiendo que en los datos del usuario hay un campo 'role' o similar)
-    this.isAdmin = this.currentUser && this.currentUser.role === 'admin';
   }
 
   handleLogout() {

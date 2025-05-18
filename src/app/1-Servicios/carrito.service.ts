@@ -165,27 +165,46 @@ export class CartService {
         // Éxito - el carritoItemsSubject ya se actualizó en agregarAlCarrito
         console.log('Producto agregado al carrito', response);
       },
-      error: () => {
-        // Falló - usar el método local como fallback
-        const piano = this.pianoService.getPianoById(pianoId);
-        if (!piano) return;
+      error: (err) => {
+        console.error('Error al agregar al carrito en el backend:', err);
 
-        const existingItemIndex = this.cartItems.findIndex(item => item.id === pianoId);
+        // Falló - obtener el piano primero del backend
+        this.pianoService.obtenerPianoPorId(pianoId).subscribe({
+          next: (pianoDTO) => {
+            // Convertir a formato Piano
+            const piano = this.pianoService.convertirDTOAPiano(pianoDTO);
 
-        if (existingItemIndex !== -1) {
-          // Increment quantity if item already exists
-          this.cartItems[existingItemIndex].quantity += quantity;
-        } else {
-          // Add new item
-          this.cartItems.push({
-            ...piano,
-            quantity
-          });
-        }
-
-        this.saveCartToStorage();
+            // Agregar al carrito local
+            this.agregarAlCarritoLocal(piano, quantity);
+          },
+          error: (err) => {
+            console.error('Error al obtener información del piano:', err);
+            // Informar al usuario de que no se pudo agregar al carrito
+            // this.mostrarErrorToast('No se pudo agregar el producto al carrito');
+          }
+        });
       }
     });
+  }
+
+// Método auxiliar para agregar al carrito local
+  private agregarAlCarritoLocal(piano: Piano, quantity: number): void {
+    if (!piano) return;
+
+    const existingItemIndex = this.cartItems.findIndex(item => item.id === piano.id);
+
+    if (existingItemIndex !== -1) {
+      // Increment quantity if item already exists
+      this.cartItems[existingItemIndex].quantity += quantity;
+    } else {
+      // Add new item
+      this.cartItems.push({
+        ...piano,
+        quantity
+      });
+    }
+
+    this.saveCartToStorage();
   }
 
   removeFromCart(pianoId: number) {

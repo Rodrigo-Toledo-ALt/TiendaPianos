@@ -57,8 +57,21 @@ export class ProductoComponent implements OnInit {
   }
 
   loadProductData() {
-    // Obtener los datos del piano del servicio
-    this.piano = this.pianoService.getPianoById(this.productId);
+    // Usando el método nuevo para obtener el piano del backend directamente
+    this.pianoService.obtenerPianoPorId(this.productId).subscribe({
+      next: (pianoDTO) => {
+        // Convertir el DTO a formato de interfaz usando el método del servicio
+        this.piano = this.pianoService.convertirDTOAPiano(pianoDTO);
+      },
+      error: (error) => {
+        console.error('Error al cargar el piano', error);
+        // En caso de error, mostrar mensaje y no hay fallback
+        this.piano = undefined; // Esto activará el mensaje de "Producto no encontrado" en la plantilla
+
+        // Opcionalmente, mostrar un mensaje con un Toast o similar
+        // this.showErrorToast('No se pudo cargar el piano. Intente de nuevo más tarde.');
+      }
+    });
   }
 
   increaseQuantity() {
