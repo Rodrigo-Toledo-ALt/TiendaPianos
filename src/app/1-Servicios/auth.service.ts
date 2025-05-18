@@ -196,6 +196,20 @@ export class AuthService {
     return this.sesionService.login({ email, contrasena }).pipe(
       tap(response => {
         this.setAuthData(response);
+      }),
+      catchError(error => {
+        // Extraer mensaje de error del backend
+        let errorMessage = 'Error al iniciar sesión';
+
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        } else if (error.error && typeof error.error === 'string') {
+          errorMessage = error.error;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+
+        return throwError(() => new Error(errorMessage));
       })
     );
   }

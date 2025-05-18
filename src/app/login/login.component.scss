@@ -147,3 +147,19 @@
 .link:hover {
   text-decoration: underline;
 }
+
+.error-message {
+  color: #ef4444;
+  padding: 8px;
+  margin-top: 8px;
+  background-color: #fee2e2;
+  border-radius: 4px;
+  font-size: 14px;
+  border: 1px solid #fecaca;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}

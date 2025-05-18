@@ -1,5 +1,4 @@
 <div class="login-container">
-
   <div class="login-content">
     <div class="login-form-container">
       <div class="login-header">
@@ -47,6 +46,16 @@
           </div>
         </div>
 
+        <!-- Indicador de carga -->
+        <div *ngIf="isLoading" class="loading-spinner">
+          <ion-spinner></ion-spinner>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div *ngIf="errorMessage" class="error-message" id="login-error">
+          {{ errorMessage }}
+        </div>
+
         <div class="forgot-password">
           <a routerLink="/resetear-contrasena" class="link">
             ¿Olvidaste tu contraseña?
@@ -56,7 +65,7 @@
         <div class="button-container">
           <button
             type="submit"
-            [disabled]="loginForm.invalid"
+            [disabled]="loginForm.invalid || isLoading"
             class="login-button"
           >
             INICIAR SESIÓN

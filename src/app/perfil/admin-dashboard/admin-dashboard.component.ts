@@ -16,13 +16,14 @@ import {
   refreshOutline,
   trashOutline
 } from "ionicons/icons";
+import {UsuariosComponent} from "./usuarios/usuarios.component";
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule]
+  imports: [CommonModule, IonicModule, FormsModule, UsuariosComponent]
 })
 export class AdminDashboardComponent implements OnInit {
   pianos: Piano[] = [];

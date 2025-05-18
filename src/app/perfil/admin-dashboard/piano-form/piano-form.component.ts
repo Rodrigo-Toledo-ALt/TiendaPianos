@@ -137,4 +137,8 @@ export class PianoFormComponent implements OnInit {
   cancel() {
     this.dismiss();
   }
+
+  updateFeature(index: number, event: any): void {
+    this.featuresList[index] = event.detail.value;
+  }
 }

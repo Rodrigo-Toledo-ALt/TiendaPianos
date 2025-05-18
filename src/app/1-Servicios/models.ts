@@ -6,6 +6,7 @@ export interface UsuarioDTO {
   nombre: string;
   email: string;
   rol: string;
+  estado: string;
   fechaRegistro: Date;
   ultimoLogin: Date;
 }

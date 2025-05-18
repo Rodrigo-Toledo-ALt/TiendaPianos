@@ -1,49 +1,75 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Gestión de Usuarios</ion-title>
-  </ion-toolbar>
-</ion-header>
+<!-- usuarios.component.html -->
+<div class="usuarios-container">
+  <!-- Mensaje de error -->
+  <ion-card *ngIf="error" color="danger">
+    <ion-card-content>
+      <ion-text>{{ error }}</ion-text>
+      <ion-button slot="end" fill="clear" (click)="cargarUsuarios()">
+        <ion-icon name="refresh-outline"></ion-icon>
+        Reintentar
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 
-<ion-content class="ion-padding">
-  <ion-refresher slot="fixed" (ionRefresh)="cargarUsuarios()">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
+  <!-- Loading skeleton -->
+  <ion-card *ngIf="cargando" class="usuarios-table-card">
+    <ion-card-content>
+      <ion-skeleton-text animated style="width: 100%; height: 40px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%; height: 80px; margin-top: 10px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%; height: 80px; margin-top: 10px;"></ion-skeleton-text>
+    </ion-card-content>
+  </ion-card>
 
-  <ng-container *ngIf="cargando">
-    <ion-skeleton-text animated style="width: 100%; height: 60px;"></ion-skeleton-text>
-    <ion-skeleton-text animated style="width: 100%; height: 60px; margin-top: 10px;"></ion-skeleton-text>
-    <ion-skeleton-text animated style="width: 100%; height: 60px; margin-top: 10px;"></ion-skeleton-text>
-  </ng-container>
+  <!-- Tabla de usuarios -->
+  <ion-card *ngIf="!cargando" class="usuarios-table-card">
+    <ion-card-content>
+      <ion-grid class="usuarios-table">
+        <ion-row class="table-header">
+          <ion-col size="2">Nombre</ion-col>
+          <ion-col size="3">Email</ion-col>
+          <ion-col size="1">Rol</ion-col>
+          <ion-col size="2">Estado</ion-col>
+          <ion-col size="2">Fecha Registro</ion-col>
+          <ion-col size="2">Acciones</ion-col>
+        </ion-row>
 
-  <ion-alert
-    *ngIf="error"
-    [isOpen]="!!error"
-    header="Error"
-    [message]="error"
-    [buttons]="['OK']">
-  </ion-alert>
+        <ion-row *ngFor="let usuario of usuarios" class="table-row">
+          <ion-col size="2" class="usuario-name">{{ usuario.nombre }}</ion-col>
+          <ion-col size="3">{{ usuario.email }}</ion-col>
+          <ion-col size="1">
+            <ion-badge [color]="usuario.rol === 'admin' ? 'warning' : 'success'">
+              {{ usuario.rol }}
+            </ion-badge>
+          </ion-col>
+          <ion-col size="2">
+            <ion-badge [color]="usuario.estado === 'activo' ? 'success' : 'medium'">
+              {{ usuario.estado || 'activo' }}
+            </ion-badge>
+          </ion-col>
+          <ion-col size="2">{{ usuario.fechaRegistro | date:'dd/MM/yyyy' }}</ion-col>
+          <ion-col size="2" class="actions-col">
+            <ion-button fill="clear" (click)="verDetallesUsuario(usuario)">
+              <ion-icon name="eye-outline"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" (click)="cambiarEstadoUsuario(usuario)">
+              <ion-icon
+                name="power-outline"
+                [color]="usuario.estado === 'activo' ? 'danger' : 'success'">
+              </ion-icon>
+            </ion-button>
+            <ion-button fill="clear" (click)="editarUsuario(usuario)">
+              <ion-icon name="create-outline"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
 
-  <ion-list *ngIf="!cargando">
-    <ion-item-sliding *ngFor="let usuario of usuarios">
-      <ion-item>
-        <ion-label>
-          <h2>{{ usuario.nombre }}</h2>
-          <p>{{ usuario.email }}</p>
-          <p>Rol: {{ usuario.rol }}</p>
-          <p>Fecha de registro: {{ usuario.fechaRegistro | date:'dd/MM/yyyy' }}</p>
-        </ion-label>
-      </ion-item>
-      <ion-item-options side="end">
-        <ion-item-option color="primary">
-          <ion-icon slot="icon-only" name="eye"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ion-list>
-
-  <div class="ion-text-center" *ngIf="usuarios.length === 0 && !cargando">
-    <ion-text color="medium">
-      <p>No se encontraron usuarios</p>
-    </ion-text>
-  </div>
-</ion-content>
+        <!-- Mensaje para cuando no hay usuarios -->
+        <ion-row *ngIf="usuarios.length === 0">
+          <ion-col size="12" class="ion-text-center">
+            <p>No se encontraron usuarios.</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</div>
