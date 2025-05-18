@@ -1,0 +1,71 @@
+<!-- user-form.component.html (updated) -->
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{ isEdit ? 'Editar Usuario' : 'Nuevo Usuario' }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-section">
+      <h2 class="section-title">Información Básica</h2>
+
+      <ion-item>
+        <ion-label position="stacked">Nombre</ion-label>
+        <ion-input [(ngModel)]="usuario.nombre" name="nombre" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input [(ngModel)]="usuario.email" type="email" name="email" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Rol</ion-label>
+        <ion-select [(ngModel)]="usuario.rol" name="rol" interface="popover" class="custom-select">
+          <ion-select-option value="user">Usuario</ion-select-option>
+          <ion-select-option value="admin">Administrador</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Estado</ion-label>
+        <ion-select [(ngModel)]="usuario.estado" name="estado" interface="popover" class="custom-select">
+          <ion-select-option value="activo">Activo</ion-select-option>
+          <ion-select-option value="inactivo">Inactivo</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+
+    <div class="form-section">
+      <h2 class="section-title">Seguridad</h2>
+
+      <ion-item>
+        <ion-label position="stacked">Nueva Contraseña (dejar en blanco para no cambiar)</ion-label>
+        <ion-input [(ngModel)]="nuevaContrasena" type="password" name="password"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Confirmar Contraseña</ion-label>
+        <ion-input [(ngModel)]="confirmarContrasena" type="password" name="confirmPassword"></ion-input>
+      </ion-item>
+
+      <div *ngIf="passwordError" class="ion-padding-top error-message">
+        {{ passwordError }}
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <ion-button type="submit" expand="block">
+        {{ isEdit ? 'Actualizar' : 'Guardar' }}
+      </ion-button>
+    </div>
+  </form>
+</ion-content>
