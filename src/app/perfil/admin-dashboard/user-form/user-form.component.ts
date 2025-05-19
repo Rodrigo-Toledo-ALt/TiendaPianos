@@ -45,8 +45,11 @@ import { closeOutline, trashOutline, addOutline } from 'ionicons/icons';
 export class UserFormComponent implements OnInit {
   @Input() usuario: UsuarioDTO = {} as UsuarioDTO;
   @Input() isEdit: boolean = false;
+  @Input() passwordOnly: boolean = false; // Nueva propiedad para modo cambio de contraseña
+  @Input() infoOnly: boolean = false;     // Nueva propiedad para modo actualización de info
 
   // Para manejo de contraseñas
+  contrasenaActual: string = '';
   nuevaContrasena: string = '';
   confirmarContrasena: string = '';
   passwordError: string = '';
@@ -69,8 +72,10 @@ export class UserFormComponent implements OnInit {
 
   onSubmit() {
     console.log('Form submitted');
-    // Validar contraseñas si se ha introducido alguna
-    if (this.nuevaContrasena || this.confirmarContrasena) {
+
+    // Validaciones según el modo
+    if (this.passwordOnly || this.nuevaContrasena || this.confirmarContrasena) {
+      // Si estamos en modo contraseña o se ha introducido una contraseña
       if (this.nuevaContrasena !== this.confirmarContrasena) {
         this.passwordError = 'Las contraseñas no coinciden';
         return;
@@ -83,6 +88,17 @@ export class UserFormComponent implements OnInit {
 
       // Añadir la contraseña al objeto usuario para el backend
       (this.usuario as any).nuevaContrasena = this.nuevaContrasena;
+
+      // Si estamos en modo solo contraseña, también incluimos la contraseña actual
+      if (this.passwordOnly && this.contrasenaActual) {
+        (this.usuario as any).contrasenaActual = this.contrasenaActual;
+      }
+    }
+
+    // Validación básica de la información
+    if (!this.passwordOnly && (!this.usuario.nombre || !this.usuario.email)) {
+      this.passwordError = 'Nombre y correo electrónico son obligatorios';
+      return;
     }
 
     this.dismiss(this.usuario);
@@ -116,5 +132,9 @@ export class UserFormComponent implements OnInit {
 
   updateConfirmPassword(event: any) {
     this.confirmarContrasena = event.detail.value;
+  }
+
+  updateCurrentPassword(event: any) {
+    this.contrasenaActual = event.detail.value;
   }
 }

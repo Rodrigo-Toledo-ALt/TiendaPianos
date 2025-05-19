@@ -149,10 +149,6 @@ export class CartService {
     }
   }
 
-  private saveCartToStorage() {
-    localStorage.setItem('cart', JSON.stringify(this.cartItems));
-    this.cartItemsSubject.next([...this.cartItems]);
-  }
 
   getCartItems(): CartItem[] {
     return [...this.cartItems];
@@ -204,7 +200,7 @@ export class CartService {
       });
     }
 
-    this.saveCartToStorage();
+
   }
 
   removeFromCart(pianoId: number) {
@@ -221,13 +217,13 @@ export class CartService {
         error: () => {
           // Fallback a localStorage
           this.cartItems = this.cartItems.filter(item => item.id !== pianoId);
-          this.saveCartToStorage();
+
         }
       });
     } else {
       // Si no existe en el backend, eliminarlo solo localmente
       this.cartItems = this.cartItems.filter(item => item.id !== pianoId);
-      this.saveCartToStorage();
+
     }
   }
 
@@ -252,16 +248,15 @@ export class CartService {
           const itemIndex = this.cartItems.findIndex(item => item.id === pianoId);
           if (itemIndex !== -1) {
             this.cartItems[itemIndex].quantity = quantity;
-            this.saveCartToStorage();
           }
         }
       });
     } else {
-      // Si no existe en el backend, actualizarlo solo localmente
+      // Si no existe en el backend, actualizarlo solo localmente, funcionalidad eliminada
       const itemIndex = this.cartItems.findIndex(item => item.id === pianoId);
       if (itemIndex !== -1) {
         this.cartItems[itemIndex].quantity = quantity;
-        this.saveCartToStorage();
+
       }
     }
   }

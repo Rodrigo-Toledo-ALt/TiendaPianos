@@ -1,4 +1,6 @@
 // user-dashboard.component.scss
+
+// Estilos generales del dashboard
 .dashboard-container {
   display: flex;
   flex-direction: column;
@@ -11,13 +13,14 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.card-title {
+.empty-title {
   font-size: 18px;
   font-weight: 600;
   color: #2c3e50;
   font-family: serif;
 }
 
+// Estilos para el estado vacío
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -32,19 +35,12 @@
   margin-bottom: 16px;
 }
 
-.empty-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 8px;
-  font-family: serif;
-}
-
 .empty-message {
   color: #7f8c8d;
   margin-bottom: 24px;
 }
 
+// Estilos para los elementos de cuenta
 .account-item {
   --padding-start: 0;
   --inner-padding-end: 0;
@@ -69,16 +65,6 @@
   margin: 0;
 }
 
-.adaggio-button {
-  --background: #2c3e50;
-  --background-hover: #1a2530;
-  --color: white;
-  font-weight: 500;
-  --border-radius: 4px;
-  --padding-start: 16px;
-  --padding-end: 16px;
-}
-
 .item-button {
   --border-color: #2c3e50;
   --color: #2c3e50;
@@ -93,4 +79,227 @@
   margin: 0;
 }
 
+// Estilos para los estados de carga y error
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
 
+  ion-spinner {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    color: #6c757d;
+  }
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+
+  p {
+    margin-bottom: 16px;
+    color: #dc3545;
+  }
+}
+
+// Estilos para la lista de pedidos y sus detalles
+.orders-list {
+  margin-top: 15px;
+}
+
+.order-container {
+  margin-bottom: 20px;
+}
+
+.order-card {
+  margin: 0;
+  box-shadow: none;
+  border: 1px solid #e0e0e0;
+  background-color: #f0f0f0;
+}
+
+.order-header {
+  background-color: #2c3e50;
+  padding: 12px 16px;
+
+  ion-card-title {
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
+.order-content {
+  padding: 0;
+}
+
+.order-body {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-info {
+  p {
+    margin: 5px 0;
+    color: #555;
+  }
+
+  .order-date {
+    font-size: 14px;
+  }
+
+  .order-total {
+    font-size: 15px;
+    font-weight: 500;
+    color: #2c3e50;
+  }
+}
+
+.order-status {
+  ion-badge {
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: lowercase;
+  }
+}
+
+.order-footer {
+  border-top: 1px solid #e0e0e0;
+  padding: 8px 16px;
+  text-align: right;
+
+  ion-button {
+    --color: #2c3e50;
+    margin: 0;
+  }
+}
+
+// Estilos para la sección de detalles del pedido
+.order-details-container {
+  margin-top: -10px;
+  margin-bottom: 20px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.loading-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+
+  ion-spinner {
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #555;
+  }
+}
+
+.details-card {
+  margin: 0;
+  border: 1px solid #e0e0e0;
+  border-top: none;
+  background-color: #f0f0f0;
+  border-radius: 0 0 8px 8px;
+
+  ion-card-header {
+    padding-bottom: 0;
+
+    ion-card-subtitle {
+      font-weight: 600;
+      color: #2c3e50;
+    }
+  }
+}
+
+.details-section {
+  margin-bottom: 20px;
+
+  p {
+    margin: 8px 0;
+  }
+}
+
+.products-section {
+  margin-bottom: 20px;
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  ion-list {
+    background: transparent;
+    padding: 0;
+  }
+
+  .product-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    --background: transparent;
+    color: #2c3e50;
+
+    h3 {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    p {
+      font-size: 12px;
+      color: #666;
+    }
+
+    ion-note {
+      font-size: 14px;
+      font-weight: 500;
+      color: #2c3e50;
+    }
+  }
+}
+
+.total-section {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 10px;
+
+  .total-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    margin: 5px 0;
+
+    span {
+      font-weight: 600;
+      color: #2c3e50;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

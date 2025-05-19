@@ -5,8 +5,25 @@
       <ion-card-title class="empty-title">Mis Pedidos</ion-card-title>
     </ion-card-header>
     <ion-card-content>
+      <!-- Indicador de carga -->
+      <div *ngIf="isLoading" class="loading-container">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Cargando pedidos...</p>
+      </div>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="error" class="error-container">
+        <ion-text color="danger">
+          <p>{{ error }}</p>
+        </ion-text>
+        <ion-button (click)="loadUserOrders()" size="small" fill="outline">
+          <ion-icon name="refresh-outline" slot="start"></ion-icon>
+          Reintentar
+        </ion-button>
+      </div>
+
       <!-- Si el usuario no tiene pedidos -->
-      <div *ngIf="!hasOrders" class="empty-state">
+      <div *ngIf="!isLoading && !error && !hasOrders" class="empty-state">
         <ion-icon name="bag-outline" class="empty-icon"></ion-icon>
         <h3 class="empty-title">No hay pedidos todavía</h3>
         <p class="empty-message">Explore nuestra colección de pianos y realice su primera compra.</p>
@@ -14,6 +31,88 @@
           <ion-icon name="musical-notes-outline" slot="start"></ion-icon>
           Explorar Pianos
         </ion-button>
+      </div>
+
+      <!-- Si el usuario SÍ tiene pedidos -->
+      <div *ngIf="!isLoading && !error && hasOrders" class="orders-list">
+        <div *ngFor="let order of userOrders" class="order-container">
+          <!-- Tarjeta principal del pedido -->
+          <ion-card class="order-card">
+            <ion-card-header class="order-header">
+              <ion-card-title class="order-id">Pedido #{{ order.id }}</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content class="order-content">
+              <div class="order-body">
+                <div class="order-info">
+                  <ion-text>
+                    <p class="order-date">Fecha: {{ order.fechaPedido | date:'dd/MM/yyyy HH:mm' }}</p>
+                    <p class="order-total">Total: {{ formatCurrency(order.total) }}</p>
+                  </ion-text>
+                </div>
+                <div class="order-status">
+                  <ion-badge [color]="getOrderStatusColor(order.estado)">
+                    {{ order.estado }}
+                  </ion-badge>
+                </div>
+              </div>
+
+              <div class="order-footer">
+                <ion-button fill="clear" size="small" (click)="toggleOrderDetails(order.id)">
+                  <ion-icon
+                    [name]="expandedOrderId === order.id ? 'chevron-up-outline' : 'chevron-down-outline'"
+                    slot="start">
+                  </ion-icon>
+                  {{ expandedOrderId === order.id ? 'Ocultar detalles' : 'Ver detalles' }}
+                </ion-button>
+              </div>
+            </ion-card-content>
+          </ion-card>
+
+          <!-- Detalles del pedido desplegados -->
+          <div *ngIf="expandedOrderId === order.id" class="order-details-container">
+            <!-- Cargando detalles -->
+            <div *ngIf="loadingOrderDetails" class="loading-details">
+              <ion-spinner name="crescent"></ion-spinner>
+              <p>Cargando detalles...</p>
+            </div>
+
+            <!-- Detalles cargados -->
+            <ion-card *ngIf="!loadingOrderDetails && selectedOrder" class="details-card">
+              <ion-card-header>
+                <ion-card-subtitle>
+                  Información del Pedido
+                </ion-card-subtitle>
+              </ion-card-header>
+
+              <ion-card-content>
+                <div class="details-section">
+                  <p><strong>Fecha:</strong> {{ formatDate(selectedOrder.fechaPedido) }}</p>
+                  <p><strong>Estado:</strong> {{ selectedOrder.estado }}</p>
+                  <p><strong>Dirección de envío:</strong> {{ selectedOrder.direccionEnvio }}</p>
+                  <p><strong>Método de pago:</strong> {{ selectedOrder.metodoPago }}</p>
+                </div>
+
+                <div class="products-section">
+                  <h4>Productos:</h4>
+                  <ion-list lines="full">
+                    <ion-item *ngFor="let item of selectedOrder.items" class="product-item">
+                      <ion-label>
+                        <h3>{{ item.nombrePiano }} {{ item.modeloPiano }}</h3>
+                        <p>Cantidad: {{ item.cantidad }} - Precio: {{ formatCurrency(item.precioUnitario) }}</p>
+                      </ion-label>
+                      <ion-note slot="end">{{ formatCurrency(item.subtotal) }}</ion-note>
+                    </ion-item>
+                  </ion-list>
+                </div>
+
+                <div class="total-section">
+                  <p class="total-line"><strong>Total:</strong> <span>{{ formatCurrency(selectedOrder.total) }}</span></p>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </div>
       </div>
     </ion-card-content>
   </ion-card>
@@ -28,7 +127,7 @@
           <h3 class="item-title">Cambiar Contraseña</h3>
           <p class="item-description">Actualice su contraseña regularmente para mayor seguridad</p>
         </ion-label>
-        <ion-button slot="end" class="item-button" fill="outline">
+        <ion-button slot="end" class="item-button" fill="outline" (click)="changePassword()">
           Cambiar
         </ion-button>
       </ion-item>
@@ -38,7 +137,7 @@
           <h3 class="item-title">Actualizar Información Personal</h3>
           <p class="item-description">Mantenga actualizada su información de contacto</p>
         </ion-label>
-        <ion-button slot="end" class="item-button" fill="outline">
+        <ion-button slot="end" class="item-button" fill="outline" (click)="updatePersonalInfo()">
           Editar
         </ion-button>
       </ion-item>
