@@ -1,0 +1,90 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Finalizar Compra</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-section">
+      <h2 class="section-title">Información de Envío</h2>
+
+      <ion-item>
+        <ion-label position="stacked">
+          <ion-icon name="location-outline"></ion-icon>
+          Dirección de envío
+        </ion-label>
+        <ion-textarea
+          [(ngModel)]="pedido.direccionEnvio"
+          name="direccionEnvio"
+          placeholder="Ingrese su dirección completa"
+          rows="3"
+          required
+        ></ion-textarea>
+      </ion-item>
+    </div>
+
+    <div class="form-section">
+      <h2 class="section-title">Método de Pago</h2>
+
+      <ion-radio-group [(ngModel)]="pedido.metodoPago" name="metodoPago">
+        <ion-item>
+          <ion-label>
+            <div class="payment-option">
+              <ion-icon name="card-outline"></ion-icon>
+              <div class="payment-text">
+                <h3>Tarjeta de crédito/débito</h3>
+                <p>Pago seguro con tarjeta</p>
+              </div>
+            </div>
+          </ion-label>
+          <ion-radio slot="start" value="tarjeta"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>
+            <div class="payment-option">
+              <ion-icon name="cash-outline"></ion-icon>
+              <div class="payment-text">
+                <h3>Transferencia bancaria</h3>
+                <p>Pago mediante transferencia</p>
+              </div>
+            </div>
+          </ion-label>
+          <ion-radio slot="start" value="transferencia"></ion-radio>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-label>
+            <div class="payment-option">
+              <ion-icon name="card-outline"></ion-icon>
+              <div class="payment-text">
+                <h3>Financiación</h3>
+                <p>Pago en cuotas mensuales</p>
+              </div>
+            </div>
+          </ion-label>
+          <ion-radio slot="start" value="financiación"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </div>
+
+    <div class="checkout-summary">
+      <h3 class="summary-header">Resumen del pedido</h3>
+      <p class="summary-total">Total a pagar: <strong>{{formatCurrency(totalPrice)}}</strong></p>
+    </div>
+
+    <div class="form-actions">
+      <ion-button expand="block" type="submit" [disabled]="processingOrder">
+        <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+        CONFIRMAR PEDIDO
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

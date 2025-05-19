@@ -1,8 +1,8 @@
-// carrito.component.ts
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+// src/app/carrito/carrito.component.ts
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, NavController, AlertController, LoadingController, ToastController, IonModal } from '@ionic/angular';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { IonicModule, NavController, AlertController, LoadingController, ToastController, ModalController } from '@ionic/angular';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { addIcons } from 'ionicons';
 import {
   trashOutline,
@@ -23,6 +23,7 @@ import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { AuthService } from '../1-Servicios/auth.service';
 import { Router } from '@angular/router';
+import { PedidoFormComponent } from './pedido-form/pedido-form.component';
 
 interface CartItem extends Piano {
   quantity: number;
@@ -36,16 +37,13 @@ interface CartItem extends Piano {
   imports: [CommonModule, IonicModule, ReactiveFormsModule]
 })
 export class CarritoComponent implements OnInit, OnDestroy {
-  @ViewChild('checkoutModal') checkoutModal!: IonModal;
-
   cart: CartItem[] = [];
   currentYear: number = new Date().getFullYear();
   private cartSubscription: Subscription | undefined;
   private isInitialLoad = true;
   isLoading = false;
 
-  // Checkout form
-  checkoutForm: FormGroup;
+  // Variable para controlar el estado del proceso de checkout
   processingOrder = false;
 
   constructor(
@@ -58,14 +56,9 @@ export class CarritoComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private alertController: AlertController,
     private loadingController: LoadingController,
-    private toastController: ToastController
-  ) {
-    // Inicializar el formulario de checkout
-    this.checkoutForm = this.formBuilder.group({
-      direccionEnvio: ['', [Validators.required, Validators.minLength(10)]],
-      metodoPago: ['tarjeta', Validators.required]
-    });
-  }
+    private toastController: ToastController,
+    private modalController: ModalController
+  ) {}
 
   ngOnInit() {
     addIcons({
@@ -172,13 +165,10 @@ export class CarritoComponent implements OnInit, OnDestroy {
   }
 
   getTotalPrice(): number {
-    return this.cart.reduce((total, item) => {
-      const price = parseFloat(item.price.replace(/\./g, '').replace(',', '.'));
-      return total + (price * item.quantity);
-    }, 0);
+    return this.cartService.getTotalPrice();
   }
 
-  handleCheckout() {
+  async handleCheckout() {
     // Verificar si el usuario está autenticado
     if (!this.authService.isAuthenticated()) {
       // Guardar la ruta de retorno
@@ -188,16 +178,28 @@ export class CarritoComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Mostrar el modal de checkout
-    this.checkoutModal.present();
+    // Crear modal con el componente pedido-form
+    const modal = await this.modalController.create({
+      component: PedidoFormComponent,
+      componentProps: {
+        totalPrice: this.getTotalPrice(),
+        processingOrder: false
+      }
+    });
+
+    // Configurar callback para cuando el modal se cierre
+    modal.onDidDismiss().then((result) => {
+      if (result.data) {
+        // Si el usuario envió el formulario, procesar el pedido
+        this.processOrder(result.data);
+      }
+    });
+
+    // Mostrar el modal
+    return await modal.present();
   }
 
-  async submitOrder() {
-    if (this.checkoutForm.invalid) {
-      this.showToast('Por favor complete todos los campos correctamente', 'warning');
-      return;
-    }
-
+  async processOrder(pedidoData: { direccionEnvio: string, metodoPago: string }) {
     // Mostrar indicador de carga
     this.processingOrder = true;
     const loading = await this.loadingController.create({
@@ -207,8 +209,8 @@ export class CarritoComponent implements OnInit, OnDestroy {
 
     // Crear la solicitud de pedido
     const pedidoRequest: CrearPedidoRequest = {
-      direccionEnvio: this.checkoutForm.value.direccionEnvio,
-      metodoPago: this.checkoutForm.value.metodoPago
+      direccionEnvio: pedidoData.direccionEnvio,
+      metodoPago: pedidoData.metodoPago
     };
 
     // Llamar al servicio para crear el pedido
@@ -217,7 +219,6 @@ export class CarritoComponent implements OnInit, OnDestroy {
         finalize(() => {
           this.processingOrder = false;
           loading.dismiss();
-          this.checkoutModal.dismiss();
         })
       )
       .subscribe({
@@ -227,11 +228,6 @@ export class CarritoComponent implements OnInit, OnDestroy {
 
           // Limpiar el carrito (el backend ya lo hace, pero actualizamos el frontend)
           this.cartService.clearCart();
-
-          // Resetear el formulario
-          this.checkoutForm.reset({
-            metodoPago: 'tarjeta'
-          });
         },
         error: (error) => {
           console.error('Error al crear el pedido:', error);
@@ -261,10 +257,6 @@ export class CarritoComponent implements OnInit, OnDestroy {
     });
 
     await alert.present();
-  }
-
-  cancelCheckout() {
-    this.checkoutModal.dismiss();
   }
 
   navigateToHome() {
@@ -303,6 +295,4 @@ export class CarritoComponent implements OnInit, OnDestroy {
 
     await toast.present();
   }
-
-  protected readonly parseFloat = parseFloat;
 }
